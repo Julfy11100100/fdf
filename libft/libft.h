@@ -3,21 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvoor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 18:17:47 by jvoor             #+#    #+#             */
-/*   Updated: 2019/04/22 18:17:49 by jvoor            ###   ########.fr       */
+/*   Updated: 2019/10/21 20:49:41 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+# define BUFF_SIZE 10000
 
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
 # include <inttypes.h>
+# include <ctype.h>
+# include <fcntl.h>
 
 typedef	struct		s_list
 {
@@ -29,6 +32,8 @@ typedef	struct		s_list
 int					ft_atoi(const char *str);
 void				ft_bzero(void *s, size_t n);
 int					ft_chrcmp(char c1, char c2);
+void				ft_delnfree(char **s);
+int					ft_findchr(char *s, char c);
 int					ft_isalnum(int ch);
 int					ft_isalpha(int ch);
 int					ft_isascii(int ch);
@@ -89,5 +94,6 @@ char				*ft_strtrim(char const *s);
 int					ft_tolower(int ch);
 int					ft_toupper(int ch);
 void				ft_wdmatch(char *s1, char *s2);
+int					get_next_line(const int fd, char **line);
 
 #endif

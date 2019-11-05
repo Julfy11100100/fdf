@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf_clean_functions_01.c                           :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvoor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/14 23:20:23 by jvoor             #+#    #+#             */
-/*   Updated: 2019/08/14 23:21:05 by jvoor            ###   ########.fr       */
+/*   Created: 2019/04/23 16:33:47 by jvoor             #+#    #+#             */
+/*   Updated: 2019/04/23 16:33:48 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "libft.h"
 
-void		del_table(t_table **table)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	t_table *bt;
-	int		i;
+	size_t	len;
+	char	*str;
 
-	if (table && *table)
-	{
-		bt = *table;
-		i = bt->h * bt->w;
-		if (bt->map)
-			del_map_pix(&(bt->map), i);
-		bt->w = 0;
-		bt->h = 0;
-		bt->map = 0;
-		free(bt->map);
-		free(bt);
-		table = NULL;
-	}
+	if (s1 == NULL)
+		return (0);
+	if (s2 == NULL)
+		return ((char *)s1);
+	len = (ft_strlen(s1) + ft_strlen(s2));
+	str = (char *)malloc(sizeof(*str) * (len + 1));
+	if (str == NULL)
+		return (0);
+	while (*s1 != '\0')
+		*str++ = *s1++;
+	while (*s2 != '\0')
+		*str++ = *s2++;
+	*str = '\0';
+	return ((char *)(str - len));
 }

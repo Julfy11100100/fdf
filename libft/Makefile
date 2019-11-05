@@ -3,18 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jvoor <marvin@42.fr>                       +#+  +:+       +#+         #
+#    By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 17:53:54 by jvoor             #+#    #+#              #
-#    Updated: 2019/04/22 17:53:55 by jvoor            ###   ########.fr        #
+#    Updated: 2019/10/06 22:50:01 by jvoor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+
 HEADER = libft.h
 SOURCES = ft_atoi.c \
 			ft_bzero.c \
 			ft_chrcmp.c \
+			ft_delnfree.c \
+			ft_findchr.c \
 			ft_isalnum.c \
 			ft_isalpha.c \
 			ft_isascii.c \
@@ -75,14 +78,24 @@ SOURCES = ft_atoi.c \
 			ft_strtrim.c \
 			ft_tolower.c \
 			ft_toupper.c \
-			ft_wdmatch.c
+			ft_wdmatch.c \
+			get_next_line.c
 
 OBJ = $(SOURCES:.c=.o)  
 
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+
+.PHONY: all dir clean fclean re
+
 all: $(NAME)
 
+%.o			: %.c
+	$(CC) $(CFLAGS) -o $@  -c $<
+
+
 $(NAME):
-	gcc -Wall -Wextra -Werror -c $(SOURCES) -I $(HEADER)
+	$(CC) $(CFLAGS) -c $(SOURCES) -I $(HEADER)
 	ar rc $(NAME) $(OBJ)
 
 clean:

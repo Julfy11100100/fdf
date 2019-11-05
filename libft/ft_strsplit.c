@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvoor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 16:34:18 by jvoor             #+#    #+#             */
-/*   Updated: 2019/04/23 16:34:19 by jvoor            ###   ########.fr       */
+/*   Updated: 2019/10/22 16:55:26 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,23 @@ static size_t	ft_countwords(char const *s, char c)
 	return (i);
 }
 
-static char		**ft_freeall(char **str, size_t n)
+static char		**del_array(char ***array)
 {
-	while (n != 0)
+	int			i;
+	char		**parray;
+
+	if (array && *array && **array)
 	{
-		ft_memdel((void *)str[n]);
-		n--;
+		parray = *array;
+		i = 0;
+		while (parray[i])
+		{
+			ft_strdel(&(parray[i]));
+			i++;
+		}
+		free(parray);
+		*array = NULL;
 	}
-	ft_memdel((void *)str);
 	return (NULL);
 }
 
@@ -73,7 +82,7 @@ char			**ft_strsplit(char const *s, char c)
 			i++;
 		str[n] = ft_fillstr(s, c, i);
 		if (str[n] == NULL)
-			return (ft_freeall(str, n));
+			return (del_array(&str));
 		i = i + ft_strlen(str[n]);
 		n++;
 	}

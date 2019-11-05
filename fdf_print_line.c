@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf_print_line.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmark <mmark@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 13:36:12 by mmark             #+#    #+#             */
-/*   Updated: 2019/08/14 20:44:52 by mmark            ###   ########.fr       */
+/*   Updated: 2019/10/23 18:24:23 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,45 @@
 
 #include <stdio.h>
 
-static void		iso(t_line *line)
+static int		kostyl(t_fdf *fdf, t_line *line, int i)
 {
-	int			prev_x1;
-	int			prev_y1;
-	int			prev_x2;
-	int			prev_y2;
+	if (i == 1)
+		return ((fdf->max / 8) + line->y2 * IMG_W + line->x2 + IMG_W / 2 +
+		fdf->move->x + fdf->move->y * IMG_W);
+	else
+		return ((fdf->max / 8) + line->c->y * IMG_W + line->c->x + IMG_W / 2 +
+		fdf->move->x + fdf->move->y * IMG_W);
+}
 
-	prev_x1 = line->x1;
-	prev_x2 = line->x2;
-	prev_y1 = line->y1;
-	prev_y2 = line->y2;
-	line->x1 = (prev_x1 - prev_y1) * cos(0.523599);
-	line->y1 = (prev_x1 + prev_y1) * sin(0.523599) - line->z1;
-	line->x2 = (prev_x2 - prev_y2) * cos(0.523599);
-	line->y2 = (prev_x2 + prev_y2) * sin(0.523599) - line->z2;
+static int		kostyl_2(t_fdf *fdf, t_line *line, int i, int f)
+{
+	if (f == 1 && i > 0 && i < fdf->max &&
+		(fdf->max / 8 + line->y2 + fdf->move->y) < IMG_H &&
+		(line->x2 < IMG_W / 2 - fdf->move->x) &&
+		(line->x2 > -IMG_W / 2 - fdf->move->x))
+		return (1);
+	if (f == 2 && i > 0 && i < fdf->max &&
+		(line->c->y + fdf->move->y) < IMG_H &&
+		(line->c->x < IMG_W / 2 - fdf->move->x) &&
+		(line->c->x > -IMG_W / 2 - fdf->move->x))
+		return (1);
+	return (0);
 }
 
 static void		print_line_params(t_fdf *fdf, t_line *line)
 {
 	int		i;
+	int		m;
 
-	i = line->y2 * IMG_W + line->x2;
-	if (line->y2 > 0 && line->x2 > 0 &&
-		line->y2 < IMG_H && line->x2 < IMG_W && i < fdf->max)
+	m = fdf->max;
+	i = kostyl(fdf, line, 1);
+	if (kostyl_2(fdf, line, i, 1))
 		fdf->img.data[i] = line->color2;
 	while (line->c->x != line->x2 || line->c->y != line->y2)
 	{
 		line->c->color = get_color(line);
-		i = line->c->y * IMG_W + line->c->x;
-		if (line->c->y > 0 && line->c->x > 0 &&
-			line->c->y < IMG_H && line->c->x < IMG_W && i < fdf->max)
+		i = kostyl(fdf, line, 2);
+		if (kostyl_2(fdf, line, i, 2))
 			fdf->img.data[i] = line->c->color;
 		line->er2 = line->er * 2;
 		if (line->er2 > (line->dy * (-1)))
@@ -62,12 +70,18 @@ static void		print_line_params(t_fdf *fdf, t_line *line)
 
 void			set_line_point(t_fdf *fdf, t_pix *p1, t_pix *p2, t_line *line)
 {
-	line->x1 = p1->x * fdf->move->zoom + fdf->move->x;
-	line->x2 = p2->x * fdf->move->zoom + fdf->move->x;
-	line->y1 = p1->y * fdf->move->zoom + fdf->move->y;
-	line->y2 = p2->y * fdf->move->zoom + fdf->move->y;
-	line->z1 = p1->z * fdf->move->zoom;
-	line->z2 = p2->z * fdf->move->zoom;
+	line->x1 = p1->x;
+	line->x2 = p2->x;
+	line->y1 = p1->y;
+	line->y2 = p2->y;
+	line->z1 = p1->z;
+	line->z2 = p2->z;
+	line->x1 = line->x1 * fdf->move->zoom;
+	line->x2 = line->x2 * fdf->move->zoom;
+	line->y1 = line->y1 * fdf->move->zoom;
+	line->y2 = line->y2 * fdf->move->zoom;
+	line->z1 = line->z1 * fdf->move->zoom;
+	line->z2 = line->z2 * fdf->move->zoom;
 	if (p1->z != 0)
 		line->z1 *= fdf->move->z;
 	if (p2->z != 0)
@@ -78,6 +92,9 @@ void			set_line_point(t_fdf *fdf, t_pix *p1, t_pix *p2, t_line *line)
 
 void			print_line(t_fdf *fdf, t_line *line)
 {
+	rot_x(line, fdf);
+	rot_y(line, fdf);
+	rot_z(line, fdf);
 	iso(line);
 	line->dx = abs(line->x2 - line->x1);
 	line->dy = abs(line->y2 - line->y1);

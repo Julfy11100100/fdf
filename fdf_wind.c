@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf_wind.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmark <mmark@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 16:51:42 by mmark             #+#    #+#             */
-/*   Updated: 2019/08/14 20:43:16 by mmark            ###   ########.fr       */
+/*   Updated: 2019/10/16 13:21:39 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void		fdf_message(t_fdf *fdf)
 {
+	mlx_string_put(fdf->mlx_ptr, fdf->win_ptr, 150, 50, 0xFF0000,
+	"'SPACE' -> reset pic");
 	mlx_string_put(fdf->mlx_ptr, fdf->win_ptr, 150, 150, 0xFF0000,
 	"'+' ; '-' -> ZOOM");
 	mlx_string_put(fdf->mlx_ptr, fdf->win_ptr, 150, 250, 0xFF0000,
@@ -22,6 +24,12 @@ void		fdf_message(t_fdf *fdf)
 	"'WASD' -> MOOVE");
 	mlx_string_put(fdf->mlx_ptr, fdf->win_ptr, 150, 450, 0xFF0000,
 	"'ESC' -> EXIT");
+	mlx_string_put(fdf->mlx_ptr, fdf->win_ptr, 150, 550, 0xFF0000,
+	"'G'/'B' -> rotate X");
+	mlx_string_put(fdf->mlx_ptr, fdf->win_ptr, 150, 650, 0xFF0000,
+	"'H'/'N' -> rotate Y");
+	mlx_string_put(fdf->mlx_ptr, fdf->win_ptr, 150, 750, 0xFF0000,
+	"'J'/'M' -> rotate Z");
 }
 
 t_fdf		*fdf_new(int ww, int wh, char **array)
@@ -35,8 +43,11 @@ t_fdf		*fdf_new(int ww, int wh, char **array)
 	move = (t_move*)malloc(sizeof(t_move));
 	fdf->table = table;
 	fdf->move = move;
+	fdf->move->angle_x = 0;
+	fdf->move->angle_y = 0;
+	fdf->move->angle_z = 0;
 	fdf->move->zoom = 1;
-	fdf->move->x = 1000;
+	fdf->move->x = 0;
 	fdf->move->y = 0;
 	fdf->move->z = 1;
 	fdf->mlx_ptr = mlx_init();
@@ -58,4 +69,18 @@ t_line		*line_new(void)
 	c = (t_pix *)malloc(sizeof(t_pix));
 	line->c = c;
 	return (line);
+}
+
+void		redraw_line(t_fdf *fdf)
+{
+	t_line	*line;
+
+	line = line_new();
+	ft_memset(fdf->img.data, 0x000000, fdf->max);
+	mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
+	print(fdf, line);
+	mlx_put_image_to_window(fdf->mlx_ptr,
+		fdf->win_ptr, fdf->img.img_ptr, 0, 0);
+	fdf_message(fdf);
+	del_line(&line);
 }

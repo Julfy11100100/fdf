@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmark <mmark@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 19:35:37 by mmark             #+#    #+#             */
-/*   Updated: 2019/08/14 20:46:31 by mmark            ###   ########.fr       */
+/*   Updated: 2019/10/23 18:06:40 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,110 +16,57 @@
 
 static int		zoom_func(t_fdf *fdf, int key)
 {
-	t_line	*line;
 	int		zoom;
 
 	zoom = fdf->move->zoom;
-	line = line_new();
-	if (key == 69)
-	{
-		if (zoom <= 1000)
-			fdf->move->zoom = zoom + 1;
-	}
-	else
-	{
-		if (zoom > 1)
-			fdf->move->zoom = zoom - 1;
-	}
-	ft_memset(fdf->img.data, 0x000000, fdf->max);
-	mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-	print(fdf, line);
-	mlx_put_image_to_window(fdf->mlx_ptr, fdf->win_ptr, fdf->img.img_ptr, 0, 0);
-	fdf_message(fdf);
-	del_line(&line);
+	if (key == 69 && zoom <= 1000)
+		fdf->move->zoom = zoom + 1;
+	else if (key == 78 && zoom > 1)
+		fdf->move->zoom = zoom - 1;
+	redraw_line(fdf);
 	return (0);
 }
 
 static int		x_func(t_fdf *fdf, int key)
 {
-	t_line		*line;
 	int			x;
 	int			y;
 
-	line = line_new();
 	x = fdf->move->x;
 	y = fdf->move->y;
 	if (key == 2)
-	{
-		fdf->move->x = x + 10;
-		fdf->move->y = y - 10;
-	}
+		fdf->move->x = x + 20;
 	else
-	{
-		fdf->move->x = x - 10;
-		fdf->move->y = y + 10;
-	}
-	ft_memset(fdf->img.data, 0x000000, fdf->max);
-	mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-	print(fdf, line);
-	mlx_put_image_to_window(fdf->mlx_ptr,
-		fdf->win_ptr, fdf->img.img_ptr, 0, 0);
-	fdf_message(fdf);
-	del_line(&line);
+		fdf->move->x = x - 20;
+	redraw_line(fdf);
 	return (0);
 }
 
 static int		y_func(t_fdf *fdf, int key)
 {
-	t_line		*line;
 	int			x;
 	int			y;
 
-	line = line_new();
 	x = fdf->move->x;
 	y = fdf->move->y;
 	if (key == 1)
-	{
-		fdf->move->y = y + 10;
-		fdf->move->x = x + 10;
-	}
+		fdf->move->y = y + 20;
 	else
-	{
-		fdf->move->y = y - 10;
-		fdf->move->x = x - 10;
-	}
-	ft_memset(fdf->img.data, 0x000000, fdf->max);
-	mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-	print(fdf, line);
-	mlx_put_image_to_window(fdf->mlx_ptr,
-		fdf->win_ptr, fdf->img.img_ptr, 0, 0);
-	fdf_message(fdf);
-	del_line(&line);
+		fdf->move->y = y - 20;
+	redraw_line(fdf);
 	return (0);
 }
 
 static int		z_func(t_fdf *fdf, int key)
 {
-	t_line		*line;
 	int			z;
 
-	line = line_new();
 	z = fdf->move->z;
-	if (key == 67)
-	{
-		fdf->move->z = z + 1;
-	}
+	if (key == 67 && z < 25)
+		fdf->move->z *= 1.04;
 	else
-	{
-		fdf->move->z = z - 1;
-	}
-	ft_memset(fdf->img.data, 0x000000, fdf->max);
-	mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-	print(fdf, line);
-	mlx_put_image_to_window(fdf->mlx_ptr,
-		fdf->win_ptr, fdf->img.img_ptr, 0, 0);
-	fdf_message(fdf);
-	del_line(&line);
+		fdf->move->z *= 0.96;
+	redraw_line(fdf);
 	return (0);
 }
 
@@ -134,8 +81,8 @@ int				key_press(int key, t_fdf *fdf)
 	if (key == 75 || key == 67)
 		z_func(fdf, key);
 	if (key == 53)
-	{
 		exit(0);
-	}
+	else
+		key_press_01(key, fdf);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf_clean_functions.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmark <mmark@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 16:36:08 by mmark             #+#    #+#             */
-/*   Updated: 2019/08/14 21:42:16 by mmark            ###   ########.fr       */
+/*   Updated: 2019/10/22 14:52:04 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void			del_fdf(t_fdf **fdf)
 		free(bdf->img.data);
 		bdf->img.data = NULL;
 		free(bdf);
-		fdf = NULL;
+		*fdf = NULL;
 	}
 }
 

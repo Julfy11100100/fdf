@@ -1,32 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvoor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/23 16:33:47 by jvoor             #+#    #+#             */
-/*   Updated: 2019/04/23 16:33:48 by jvoor            ###   ########.fr       */
+/*   Created: 2019/04/16 11:37:31 by jvoor             #+#    #+#             */
+/*   Updated: 2019/04/16 11:37:32 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	*ft_memmove(void *dst, const void *src, size_t l)
 {
-	size_t	len;
-	char	*str;
+	size_t	i;
 
-	if (s1 == NULL || s2 == NULL)
-		return (0);
-	len = (ft_strlen(s1) + ft_strlen(s2));
-	str = (char *)malloc(sizeof(*str) * (len + 1));
-	if (str == NULL)
-		return (0);
-	while (*s1 != '\0')
-		*str++ = *s1++;
-	while (*s2 != '\0')
-		*str++ = *s2++;
-	*str = '\0';
-	return ((char *)(str - len));
+	if (dst == NULL && src == NULL)
+		return (NULL);
+	if (dst <= src)
+	{
+		i = 0;
+		while (i < l)
+		{
+			((unsigned char*)dst)[i] = ((const unsigned char*)src)[i];
+			i++;
+		}
+	}
+	else
+	{
+		i = l;
+		while (i > 0)
+		{
+			((unsigned char*)dst)[i - 1] = ((const unsigned char*)src)[i - 1];
+			i--;
+		}
+	}
+	return (dst);
 }

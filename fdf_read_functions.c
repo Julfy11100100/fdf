@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf_read_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmark <mmark@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 20:23:26 by mmark             #+#    #+#             */
-/*   Updated: 2019/08/14 18:16:38 by mmark            ###   ########.fr       */
+/*   Updated: 2019/10/22 16:56:48 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,17 @@ char		**get_array(char *file)
 	while (get_next_line(fd, &line) == 1)
 	{
 		i++;
-		free(line);
+		ft_strdel(&line);
 	}
 	table = (char**)malloc(sizeof(char*) * i + 1);
 	table[i] = NULL;
-	i = 0;
+	i = -1;
 	close(fd);
 	fd = open(file, O_RDONLY);
 	while (get_next_line(fd, &line) == 1)
 	{
-		table[i] = ft_strdup(line);
-		i++;
-		free(line);
+		table[++i] = ft_strdup(line);
+		ft_strdel(&line);
 	}
 	close(fd);
 	return (table);

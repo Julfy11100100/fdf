@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf_clean_functions_01.c                           :+:      :+:    :+:   */
+/*   ft_findchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvoor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/14 23:20:23 by jvoor             #+#    #+#             */
-/*   Updated: 2019/08/14 23:21:05 by jvoor            ###   ########.fr       */
+/*   Created: 2019/05/29 07:57:55 by jvoor             #+#    #+#             */
+/*   Updated: 2019/05/29 07:57:57 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "libft.h"
 
-void		del_table(t_table **table)
+int		ft_findchr(char *s, char c)
 {
-	t_table *bt;
-	int		i;
-
-	if (table && *table)
+	if (s == NULL)
+		return (0);
+	if (c == '\0')
+		return (1);
+	while (*s)
 	{
-		bt = *table;
-		i = bt->h * bt->w;
-		if (bt->map)
-			del_map_pix(&(bt->map), i);
-		bt->w = 0;
-		bt->h = 0;
-		bt->map = 0;
-		free(bt->map);
-		free(bt);
-		table = NULL;
+		if (*s == c)
+			return (1);
+		s++;
 	}
+	return (0);
 }

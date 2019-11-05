@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_valid.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmark <mmark@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 16:01:31 by jvoor             #+#    #+#             */
-/*   Updated: 2019/08/14 16:43:36 by mmark            ###   ########.fr       */
+/*   Updated: 2019/10/22 20:10:00 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,25 @@ static int		check_strs_words(char **str)
 	int			count_first;
 	int			count_next;
 	int			i;
+	int			j;
 
 	i = 0;
 	count_first = 0;
-	count_next = 0;
-	buff = (ft_strsplit(str[0], ' ') - 1);
-	while (*(++buff) != NULL)
+	buff = (ft_strsplit(str[0], ' '));
+	j = -1;
+	while (buff[++j] != NULL)
 		count_first++;
+	del_array(&buff);
 	while (str[++i])
 	{
+		j = -1;
+		count_next = 0;
 		buff = ft_strsplit(str[i], ' ');
-		while (*buff != NULL)
-		{
-			buff++;
+		while (buff[++j] != NULL)
 			count_next++;
-		}
 		if (count_first != count_next)
 			return (-1);
-		count_next = 0;
+		del_array(&buff);
 	}
 	return (1);
 }

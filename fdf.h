@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmark <mmark@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 13:34:27 by mmark             #+#    #+#             */
-/*   Updated: 2019/08/14 20:42:05 by mmark            ###   ########.fr       */
+/*   Updated: 2019/10/22 17:22:28 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <mlx.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include "get_next_line/get_next_line.h"
+# include "libft/libft.h"
 
 # define IMG_W 1920
 # define IMG_H 1080
@@ -26,17 +26,20 @@
 
 typedef struct	s_move
 {
-	int			x;
-	int			y;
-	int			z;
+	float		x;
+	float		y;
+	float		z;
 	int			zoom;
+	float		angle_x;
+	float		angle_y;
+	float		angle_z;
 }				t_move;
 
 typedef struct	s_pix
 {
-	int			x;
-	int			y;
-	int			z;
+	float		x;
+	float		y;
+	float		z;
 	int			color;
 }				t_pix;
 
@@ -54,8 +57,8 @@ typedef struct	s_line
 	int			x2;
 	int			y1;
 	int			y2;
-	int			z1;
-	int			z2;
+	float		z1;
+	float		z2;
 	int			dx;
 	int			dy;
 	int			sx;
@@ -91,9 +94,11 @@ void			print_line(t_fdf *fdf, t_line *line);
 t_fdf			*fdf_new(int ww, int wh, char **array);
 void			fdf_message(t_fdf *fdf);
 t_line			*line_new(void);
+void			redraw_line(t_fdf *fdf);
 
 int				deal_key(int key, t_fdf *fdf);
 int				key_press(int key, t_fdf *fdf);
+int				key_press_01(int key, t_fdf *fdf);
 
 void			del_fdf(t_fdf **fdf);
 void			del_array(char ***array);
@@ -116,5 +121,10 @@ int				mouse_release(int button, int x, int y, t_fdf *fdf);
 
 int				is_valid(char **str);
 int				name_valid(char *name);
+
+void			iso(t_line *line);
+void			rot_x(t_line *line, t_fdf *fdf);
+void			rot_y(t_line *line, t_fdf *fdf);
+void			rot_z(t_line *line, t_fdf *fdf);
 
 #endif

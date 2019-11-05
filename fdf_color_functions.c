@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf_color_functions.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmark <mmark@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jvoor <jvoor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 22:57:47 by mmark             #+#    #+#             */
-/*   Updated: 2019/08/14 16:22:28 by mmark            ###   ########.fr       */
+/*   Updated: 2019/10/02 15:39:51 by jvoor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,16 @@ int					pix_color(char *str, int z)
 		return (ft_atoi_h(1 + ft_strchr(str, ',')));
 	else
 	{
-		if (z == 0)
-			return (0xFFFFFF);
-		if (0 < z && z < 6)
-			return (0x00FF00);
-		if (5 < z && z < 11)
-			return (0xFFFF00);
-		if (z >= 11)
+		if (z <= 0)
 			return (0x0000FF);
+		if (0 < z && z <= 4)
+			return (0x0FFF0F);
+		if (5 < z && z <= 6)
+			return (0x00FF00);
+		if (7 < z && z < 11)
+			return (0xE0E0E0);
+		if (z >= 11)
+			return (0xFFFFFF);
 	}
 	return (0xFF0000);
 }
